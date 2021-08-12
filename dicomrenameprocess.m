@@ -4,7 +4,7 @@ function dicomrenameprocess(inputdir)
 % read then puts all the new dicom files into separate folders by each 
 % set of 256 ima files for compatibility with rest of the code
 % not the best code but that's ok
-% 08/11/21 Min Jung Kim
+% last updated 08/12/21 Min Jung Kim
 S = dir(fullfile(inputdir,'*.IMA'));
 for k = 1:numel(S)
     % fnm = fullfile(inputdir,S(k).name);
@@ -12,8 +12,10 @@ for k = 1:numel(S)
     dicomrename(inputdir,S(k).name,'rename');
 end
 % move all files to individual folders
+pause(2);
 allFileNames = {S.name};
-temp = 0;
+% there is a better way to code this instead of turning the warning off then back on
+warning('off','MATLAB:MKDIR:DirectoryExists') 
 for k = 1 : length(allFileNames)
     thisName = allFileNames{k};
     [~, baseFileNameNoExt, ~] = fileparts(thisName);
@@ -22,15 +24,16 @@ for k = 1 : length(allFileNames)
     end
     fprintf('Processing %s.\n', baseFileNameNoExt);
     nameParts = strsplit(baseFileNameNoExt, '.');
-    if nameParts{end-1} ~= temp
-        temp = nameParts{end-1};
-        mkdir(inputdir,temp);
-    end
-    if ispc
-        movefile(strcat(inputdir,'\',thisName),strcat(inputdir,'\',temp));
-    else
-        movefile(strcat(inputdir,'/',thisName),strcat(inputdir,'/',temp));
+    temp = nameParts{end-1};
+    mkdir(inputdir,temp); 
+    % if the 3rd last section is all numbers, move the file to directory
+    if ~any(isstrprop(nameParts{end-2},'alpha')) 
+        if ispc
+            movefile(strcat(inputdir,'\',thisName),strcat(inputdir,'\',temp));
+        else
+            movefile(strcat(inputdir,'/',thisName),strcat(inputdir,'/',temp));
+        end
     end
 end
-
+warning('on','MATLAB:MKDIR:DirectoryExists')
 end
