@@ -113,7 +113,7 @@ if nargin < 5
         if nargin < 3
             action = 'copy';
             if nargin == 1
-                narginchk(2,2);
+                error(nargchk(2,2, nargin));
             elseif nargin == 0 
                 [fnames, fpathin] = uigetfile(...
                     {'*.dcm;*.ima', 'Compatible files (*.dcm; *.ima)';...
@@ -128,7 +128,7 @@ if nargin < 5
         end
     end
 else
-    narginchk(0,5);
+    error(nargchk(0,5, nargin));
 end
 
 %==========================================================================
@@ -149,13 +149,13 @@ for i=1:length(fnames)
     % Construct the new file name
     newfname = '';
     for j=1:length(namestring)        
-        structname = dinfo;% used to be 'dinfo' (MJ)
+        structname = 'dinfo'; 
         % Handle nested elements e.g. 'PatientName.FamilyName'
         namestr=cell2mat(namestring(j));
-        if contains(namstr,'.') %strfind(namestr, '.') (MJ)
+        if strfind(namestr, '.')
             while true
                 [str, namestr] = strtok(namestr, '.');
-                if isempty(namestr)
+                if isempty(namestr),
                     namestring(j) = {str};
                     break;  
                 end
@@ -187,7 +187,7 @@ for i=1:length(fnames)
         try
             delete(fullfile(fpath,strcat(fname,fext)));
         catch
-            error('Failed. Move and delete it by hand.');
+            error('Failed. Delete it by hand.');
         end
     end
 end
