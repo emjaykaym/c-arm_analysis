@@ -5,6 +5,13 @@ function dicomrenameprocess(inputdir)
 % set of 256 ima files for compatibility with rest of the code
 % not the best code but that's ok
 % last updated 08/12/21 Min Jung Kim
+
+% future updates: 
+% 1) only sort the even number files into folders
+% 2) not sure why there is a folder called 531250 being made
+% 3) there is a better way to code this instead of turning the warning off then back on
+% (ie: check if directory is already made)
+
 S = dir(fullfile(inputdir,'*.IMA'));
 for k = 1:numel(S)
     % fnm = fullfile(inputdir,S(k).name);
@@ -12,9 +19,11 @@ for k = 1:numel(S)
     dicomrename(inputdir,S(k).name,'rename');
 end
 % move all files to individual folders
-pause(2);
+
+%%
+fprintf('Wait a second and press any key to continue. \n');
+pause; % an error occurs otherwise
 allFileNames = {S.name};
-% there is a better way to code this instead of turning the warning off then back on
 warning('off','MATLAB:MKDIR:DirectoryExists') 
 for k = 1 : length(allFileNames)
     thisName = allFileNames{k};
@@ -36,4 +45,5 @@ for k = 1 : length(allFileNames)
     end
 end
 warning('on','MATLAB:MKDIR:DirectoryExists')
+
 end
