@@ -10,7 +10,7 @@ function dicomrenameprocess(inputdir)
 % 1) only sort the even number files into folders
 % 2) not sure why there is a folder called 531250 being made
 % 3) there is a better way to code this instead of turning the warning off then back on
-% (ie: check if directory is already made)
+% (ie: check if directory already exists)
 
 S = dir(fullfile(inputdir,'*.IMA'));
 for k = 1:numel(S)

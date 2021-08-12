@@ -28,12 +28,9 @@ delx = info.PixelSpacing(1);
 dely = info.PixelSpacing(2);
 delz = info.SliceThickness;
 
-%
-
 in = (ind-1)*delx;
 jn = (jnd-1)*dely;
 kn = (knd-1)*delz;
-
 
 % figure;
 value = value /max(value);
